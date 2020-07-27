@@ -18,9 +18,12 @@ jobs:
       with:
         path: vendor/
         key: ${{ runner.os }}-laravel-vendor
+    - name: Create .env file
+      run: cp .env.example .env
     - run: |
-        php -v
         composer install
+        php artisan migrate
+        php artisan db:seed
     services:
       mysql:
         image: mysql:5.7
