@@ -20,6 +20,8 @@ jobs:
     - name: Test script
       run: |
         composer install
+        php config:clear
+        php cache:clear
         php artisan migrate
         php artisan db:seed
         php artisan test
