@@ -36,6 +36,7 @@ jobs:
   deploy:
     name: Deploy to server
     runs-on: self-hosted
+    needs: test
     container: dotlabs/ansible
     steps:
     - uses: actions/checkout@v2
