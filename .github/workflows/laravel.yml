@@ -5,8 +5,12 @@ on:
       
 jobs: 
   test:
+    name: Laravel Migrate Test
     runs-on: self-hosted
     container: kudaliar032/php:7.4-cli-root
+    env:
+      DB_HOST: mysql
+      DB_PASSWORD: Namex6(00)9
     steps:
     - uses: actions/checkout@v2
     - name: Cache PHP vendor
@@ -17,3 +21,9 @@ jobs:
     - run: |
         php -v
         composer install
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: Namex6(00)9
+          MYSQL_DATABASE: laravel
