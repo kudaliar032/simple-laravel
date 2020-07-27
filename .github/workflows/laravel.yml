@@ -1,0 +1,19 @@
+name: Laravel CI
+on:
+  push:
+    branches: [master]
+      
+jobs: 
+  test:
+    runs-on: self-hosted
+    container: kudaliar/php:7.4-cli
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache PHP vendor
+      uses: actions/cache@v2
+      with:
+        path: vendor/
+        key: ${{ runner.os }}-laravel-vendor
+    - run: |
+        php -v
+        composer install
