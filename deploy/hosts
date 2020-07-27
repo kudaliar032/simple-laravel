@@ -1,2 +1,2 @@
 [aws]
-aws ansible_host=13.250.126.86 
+aws-server ansible_host=13.250.126.86 
