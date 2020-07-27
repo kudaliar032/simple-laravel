@@ -37,13 +37,13 @@ jobs:
     name: Deploy to server
     runs-on: self-hosted
     needs: test
-    container: dotlabs/ansible
+    container: kudaliar032/ansible:gpg
     steps:
     - uses: actions/checkout@v2
-    - name: Prepare deploy key
-      run: |
-        eval $(ssh-agent -s)
-        /bin/bash -c 'ssh-add <(echo "$DEPLOY_KEY")'
-        mkdir -p ~/.ssh
-        echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-        ansible-playbook -i deploy/hosts deploy/aws.yml
+    - name: Decrypt deploy key
+      run: ./deploy/decrypt_gpg.sh deploy/deploy_key.gpg deploy/deploy_key $DEPLOY_KEY_PASSPHRASE
+    - name: Play ansible deploy playbook
+      run: ansible-playbook --inventory deploy/hosts --private-key deploy/deploy_key deploy/aws.yml
+      env:
+        ANSIBLE_HOST_KEY_CHECKING: 'false'
+        ANSIBLE_DEPRECATION_WARNINGS: 'false'
