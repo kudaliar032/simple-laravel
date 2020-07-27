@@ -5,7 +5,7 @@ on:
       
 jobs: 
   test:
-    name: Laravel Migrate Test
+    name: Laravel migrate test
     runs-on: self-hosted
     container: kudaliar032/php:7.4-cli-root
     env:
@@ -33,3 +33,16 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: Namex6(00)9
           MYSQL_DATABASE: laravel
+  deploy:
+    name: Deploy to server
+    runs-on: self-hosted
+    container: dotlabs/ansible
+    steps:
+    - uses: actions/checkout@v2
+    - name: Prepare deploy key
+      run: |
+        eval $(ssh-agent -s)
+        /bin/bash -c 'ssh-add <(echo "$DEPLOY_KEY")'
+        mkdir -p ~/.ssh
+        echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+        ansible-playbook -i deploy/hosts deploy/aws.yml

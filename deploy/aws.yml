@@ -1,0 +1,34 @@
+---
+- name: Deploy to aws Server
+  hosts: aws
+  become: yes
+  remote_user: ec2-user
+  gather_facts: no
+  vars:
+    deploy_to: /home/ec2-user/app/simple-laravel
+    git_repo: git@github.com:kudaliar032/simple-laravel.git
+    composer_path: /usr/local/bin/composer
+    php_path: /usr/bin/php 
+  tasks:
+  - name: Update repository
+    git:
+      repo: "{{ git_repo }}"
+      dest: "{{ deploy_to }}"
+      accept_hostkey: true
+      version: master
+      update: yes
+      force: yes
+      recursive: yes
+      key_file: /home/ec2-user/.ssh/id_rsa
+  - name: Running composer install
+    composer:
+      working_dir: "{{ deploy_to }}"
+  - name: Run php artisan
+    shell:
+      cmd: "{{ php_path }} artisan {{ item }}"
+      chdir: "{{ deploy_to }}"
+    loop:
+      - config:clear
+      - cache:clear
+      - migrate
+      - db:seed
