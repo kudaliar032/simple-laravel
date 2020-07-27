@@ -8,9 +8,6 @@ jobs:
     name: Laravel migrate test
     runs-on: self-hosted
     container: kudaliar032/php:7.4-cli-root
-    env:
-      DB_HOST: mysql
-      DB_PASSWORD: Namex6(00)9
     steps:
     - uses: actions/checkout@v2
     - name: Cache PHP vendor
@@ -19,13 +16,12 @@ jobs:
         path: vendor/
         key: ${{ runner.os }}-laravel-vendor
     - name: Create .env file
-      run: cp .env.example .env
+      run: cp .env.testing .env
     - name: Test script
       run: |
         composer install
         php artisan migrate
         php artisan db:seed
-        php artisan key:generate
         php artisan test
     services:
       mysql:
