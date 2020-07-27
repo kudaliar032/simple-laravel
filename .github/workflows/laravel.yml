@@ -6,7 +6,7 @@ on:
 jobs: 
   test:
     runs-on: self-hosted
-    container: kudaliar/php:7.4-cli
+    container: kudaliar032/php:7.4-cli
     steps:
     - uses: actions/checkout@v2
     - name: Cache PHP vendor
