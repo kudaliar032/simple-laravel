@@ -24,11 +24,13 @@ jobs:
         php artisan db:seed
         php artisan test
     services:
-      mysql:
+      database:
         image: mysql:5.7
         env:
           MYSQL_ROOT_PASSWORD: Namex6(00)9
           MYSQL_DATABASE: laravel
+          MYSQL_USER: laravel
+          MYSQL_PASSWORD: Namex6(00)9
   deploy:
     name: Deploy to server
     runs-on: self-hosted
