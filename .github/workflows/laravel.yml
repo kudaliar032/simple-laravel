@@ -1,12 +1,13 @@
 name: Laravel CI
+
 on:
   push:
     branches: [master]
       
 jobs: 
   test:
+    runs-on: ubuntu-latest
     name: Laravel migrate test
-    runs-on: self-hosted
     container: kudaliar032/php:7.4-cli-root
     steps:
     - uses: actions/checkout@v2
@@ -33,19 +34,3 @@ jobs:
           MYSQL_DATABASE: laravel
           MYSQL_USER: laravel
           MYSQL_PASSWORD: Namex6(00)9
-  deploy:
-    name: Deploy to server
-    runs-on: self-hosted
-    needs: test
-    container: kudaliar032/ansible:gpg
-    env:
-      DEPLOY_KEY_PASSPHRASE: ${{ secrets.DEPLOY_KEY_PASSPHRASE }}
-    steps:
-    - uses: actions/checkout@v2
-    - name: Decrypt deploy key
-      run: ./deploy/decrypt_gpg.sh deploy/deploy_key.gpg deploy/deploy_key $DEPLOY_KEY_PASSPHRASE
-    - name: Play ansible deploy playbook
-      run: ansible-playbook --inventory deploy/hosts --private-key deploy/deploy_key deploy/aws.yml
-      env:
-        ANSIBLE_HOST_KEY_CHECKING: 'false'
-        ANSIBLE_DEPRECATION_WARNINGS: 'false'
